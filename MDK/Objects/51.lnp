@@ -1,0 +1,6 @@
+".\Objects\STARTUP.obj",
+".\Objects\main.obj",
+".\Objects\bsp.obj",
+".\Objects\bsp_key.obj" 
+TO ".\Objects\51" 
+PRINT(".\Listings\51.m51")
