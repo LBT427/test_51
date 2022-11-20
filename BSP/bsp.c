@@ -13,7 +13,9 @@ static void task10ms();
 
 void bspInit()
 {
+	\]bsp_InitKeyVar();
     timer0Init();
+	
 }
 
 void timer0Init()
@@ -45,4 +47,5 @@ static void task10ms()
     // matrixKeyScan_1();
     // matrixKeyScan_2();
     matrixKeyScan_3();
+	bsp_KeyScan();
 }

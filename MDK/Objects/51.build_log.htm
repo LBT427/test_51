@@ -23,14 +23,18 @@ Project File Date:  11/18/2022
 
 <h2>Output:</h2>
 Build target 'Target 1'
+compiling bsp.c...
+..\BSP\bsp.c(16): warning C206: 'bsp_InitKeyVar': missing function-prototype
 linking...
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?MATRIXKEYSCAN_1?BSP_KEY
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?MATRIXKEYSCAN_2?BSP_KEY
-Program Size: data=17.0 xdata=0 code=512
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?BSP_GETKEY?BSP_KEY
+Program Size: data=56.0 xdata=0 code=1595
 creating hex file from ".\Objects\51"...
-".\Objects\51" - 0 Error(s), 2 Warning(s).
+".\Objects\51" - 0 Error(s), 4 Warning(s).
 Build Time Elapsed:  00:00:01
 </pre>
 </body>

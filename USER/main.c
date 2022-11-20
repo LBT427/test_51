@@ -22,6 +22,7 @@ int main()
 	bspInit();
 	while (1)
 	{
+		//KeyValue=bsp_GetKey();
 		if (KeyValue >=0 && KeyValue < 16)
 		{
 			led = disBuffer[KeyValue];
