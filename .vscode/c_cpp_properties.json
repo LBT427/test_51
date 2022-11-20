@@ -3,7 +3,7 @@
         {
             "name": "Target 1",
             "includePath": [
-                "${workspaceFolder}/**"
+                "reg51.h"
             ],
             "defines": [
                 "__C51__",
