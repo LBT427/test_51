@@ -2,13 +2,13 @@
  * @Author: liubotao
  * @Date: 2022-11-18 00:13:48
  * @LastEditors: liubotao
- * @LastEditTime: 2022-11-21 09:54:49
+ * @LastEditTime: 2022-11-21 10:11:30
  * @FilePath: \test_51\BSP\bsp_key\bsp_key.c
  * @Description: 按键检测和矩阵按键检测
  * 
  */
 
-#include "bsp_key.h"
+#include "bsp.h"
 #include "fifo.h"
 
 
@@ -19,7 +19,7 @@ sbit key_2 =P3^2;
 
 #define keyUncertainTime 3//消抖时间 ( x10 ms)
 
-int KeyValue; //全局函数，键值
+self_t KeyValue; //全局函数，键值
 
 unsigned char code KEY_TABLE[] =
  {

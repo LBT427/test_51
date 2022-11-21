@@ -2,7 +2,7 @@
  * @Author: liubotao
  * @Date: 2022-11-18 00:13:57
  * @LastEditors: liubotao
- * @LastEditTime: 2022-11-21 10:01:30
+ * @LastEditTime: 2022-11-21 10:11:32
  * @FilePath: \test_51\BSP\bsp_key\bsp_key.h
  * @Description: °´¼ü¼ì²âºÍ¾ØÕó°´¼ü¼ì²â
  * @
@@ -13,7 +13,7 @@
 #include "type.h"
 //#include "bsp.h"
 
-extern int KeyValue;
+extern self_t KeyValue;
 int matrixKeyScan_1();
 int matrixKeyScan_2();
 int matrixKeyScan_3();
