@@ -2,31 +2,36 @@
  * @Author: liubotao
  * @Date: 2022-08-29 16:37:40
  * @LastEditors: liubotao
- * @LastEditTime: 2022-11-20 10:29:26
+ * @LastEditTime: 2022-11-20 23:50:28
  * @FilePath: \test_51\USER\main.c
  * @Description: 矩阵按键检测
  *
  */
 #include "reg51.h"
 #include "bsp.h"
-#define uint8_t unsigned char
-#define uint16_t unsigned short int
+#include "fifo.h"
+//#define uint8_t unsigned char
+//#define uint16_t unsigned short int
 #define key P1
 #define led P2
-
+extern FIFO f_K;
 uint8_t code disBuffer[] = {0xc0, 0xf9, 0xa4, 0xb0, 0x99, 0x92, 0x82, 0xf8,
 							0x80, 0x90, 0x88, 0x83, 0xc6, 0xa1, 0x86, 0x8e};
 
 int main()
 {
+	int KeyValue_1; //全局函数，键值
+
 	bspInit();
 	while (1)
 	{
-		//KeyValue=bsp_GetKey();
+ 		KeyValue_1=deQueue(&f_K);
+		LcdShowStr(0,0,"okk");    			  //显示字符串
+
 		if (KeyValue >=0 && KeyValue < 16)
 		{
 			led = disBuffer[KeyValue];
 		}
 	}
 }
-//一次测试
+//一次测试    

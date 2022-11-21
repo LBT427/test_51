@@ -1,0 +1,1 @@
+"..\BSP\bsp_lcd1602\lcd1602.c" OPTIMIZE (8,SPEED) BROWSE INCDIR(..\BSP;..\BSP\bsp_key;..\USER;..\BSP\bsp_lcd1602) DEBUG OBJECTEXTEND PRINT(.\Listings\lcd1602.lst) TABS (2) OBJECT(.\Objects\lcd1602.obj)

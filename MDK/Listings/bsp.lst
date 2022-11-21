@@ -1,10 +1,10 @@
-C51 COMPILER V9.60.0.0   BSP                                                               11/18/2022 17:17:26 PAGE 1   
+C51 COMPILER V9.60.0.0   BSP                                                               11/21/2022 02:42:51 PAGE 1   
 
 
 C51 COMPILER V9.60.0.0, COMPILATION OF MODULE BSP
 OBJECT MODULE PLACED IN .\Objects\bsp.obj
-COMPILER INVOKED BY: D:\keil5\C51\BIN\C51.EXE ..\BSP\bsp.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\BSP;..\BSP\bsp_key) DEBUG 
-                    -OBJECTEXTEND PRINT(.\Listings\bsp.lst) OBJECT(.\Objects\bsp.obj)
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE ..\BSP\bsp.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\BSP;..\BSP\bsp_key;..\US
+                    -ER;..\BSP\bsp_lcd1602) DEBUG OBJECTEXTEND PRINT(.\Listings\bsp.lst) TABS(2) OBJECT(.\Objects\bsp.obj)
 
 line level    source
 
@@ -12,8 +12,8 @@ line level    source
    2           * @Author: liubotao
    3           * @Date: 2022-11-18 00:32:28
    4           * @LastEditors: liubotao
-   5           * @LastEditTime: 2022-11-18 02:54:30
-   6           * @FilePath: \test51\BSP\bsp.c
+   5           * @LastEditTime: 2022-11-20 21:38:42
+   6           * @FilePath: \test_51\BSP\bsp.c
    7           * @Description: 中断和驱动初始化
    8           *
    9           */
@@ -23,49 +23,49 @@ line level    source
   13          
   14          void bspInit()
   15          {
-  16   1              bsp_InitKeyVar();
-*** WARNING C206 IN LINE 16 OF ..\BSP\bsp.c: 'bsp_InitKeyVar': missing function-prototype
-  17   1          timer0Init();
-  18   1              
-  19   1      }
-  20          
-  21          void timer0Init()
-  22          {
-  23   1          TMOD |= 0X10;
-  24   1      
-  25   1          TH1 = 0XFC; //定时1ms
-  26   1          TL1 = 0X18;
-  27   1          ET1 = 1;
-  28   1          EA = 1;
-  29   1          TR1 = 1;
-  30   1      }
-  31          
-  32          void Timer1() interrupt 3
-  33          {
-  34   1          static int time_num;
-  35   1          TH1 = 0XFC; //定时1ms
-  36   1          TL1 = 0X18;
-  37   1          time_num++;
-  38   1          if (time_num == 10) // 10ms
-  39   1          {
-  40   2              time_num = 0;
-  41   2              task10ms();
-  42   2          }
-  43   1      }
-  44          
-  45          static void task10ms()
-  46          {
-  47   1          // matrixKeyScan_1();
-  48   1          // matrixKeyScan_2();
-  49   1          matrixKeyScan_3();
-  50   1              bsp_KeyScan();
-  51   1      }
+  16   1          bsp_InitKeyVar();
+  17   1          initLcd1602();
+  18   1          timer0Init();
+  19   1        
+  20   1      }
+  21          
+  22          void timer0Init()
+  23          {
+  24   1          TMOD |= 0X10;
+  25   1      
+  26   1          TH1 = 0XFC; //定时1ms
+  27   1          TL1 = 0X18;
+  28   1          ET1 = 1;
+  29   1          EA = 1;
+  30   1          TR1 = 1;
+  31   1      }
+  32          
+  33          void Timer1() interrupt 3
+  34          {
+  35   1          static int time_num;
+  36   1          TH1 = 0XFC; //定时1ms
+  37   1          TL1 = 0X18;
+  38   1          time_num++;
+  39   1          if (time_num == 10) // 10ms
+  40   1          {
+  41   2              time_num = 0;
+  42   2              task10ms();
+  43   2          }
+  44   1      }
+  45          
+  46          static void task10ms()
+  47          {
+  48   1          // matrixKeyScan_1();
+  49   1          // matrixKeyScan_2();
+  50   1          matrixKeyScan_3();
+  51   1        bsp_KeyScan();
+  52   1      }
 
 
-C51 COMPILER V9.60.0.0   BSP                                                               11/18/2022 17:17:26 PAGE 2   
+C51 COMPILER V9.60.0.0   BSP                                                               11/21/2022 02:42:51 PAGE 2   
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    111    ----
+   CODE SIZE        =    114    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
@@ -75,4 +75,4 @@ MODULE INFORMATION:   STATIC OVERLAYABLE
 END OF MODULE INFORMATION.
 
 
-C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

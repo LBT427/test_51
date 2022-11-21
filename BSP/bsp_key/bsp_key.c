@@ -2,12 +2,16 @@
  * @Author: liubotao
  * @Date: 2022-11-18 00:13:48
  * @LastEditors: liubotao
- * @LastEditTime: 2022-11-18 16:59:31
- * @FilePath: \test51\BSP\bsp_key\bsp_key.c
+ * @LastEditTime: 2022-11-20 23:50:27
+ * @FilePath: \test_51\BSP\bsp_key\bsp_key.c
  * @Description: 矩阵按键检测
  * 
  */
+#include "bsp_key.h"
 #include "bsp.h"
+#include "fifo.h"
+
+
 #define keyboard P1
 
 sbit key_1= P3^1;
@@ -117,51 +121,66 @@ int matrixKeyScan_3()
 	}
 	
 }
+
+
 static unsigned char IsKeyDown1(void) {if ((key_1) == 0) return 1;else return 0;}
+
+
 static unsigned char IsKeyDown2(void) {if ((key_2) == 0) return 1;else return 0;}
 
-static KEY_T s_tBtn[KEY_COUNT] = {0};
-static KEY_FIFO_T s_tKey;		/* 按键FIFO变量,结构体 */
 
 
-void bsp_PutKey(unsigned char _KeyCode)
-{
-	s_tKey.Buf[s_tKey.Write] = _KeyCode;
+//static KEY_FIFO_T s_tKey;		/* 按键FIFO变量,结构体 */
 
-	if (++s_tKey.Write  >= KEY_FIFO_SIZE)
-	{
-		s_tKey.Write = 0;
-	}
-}
 
-unsigned char bsp_GetKey(void)
-{
-	unsigned char ret;
+// void bsp_PutKey(unsigned char _KeyCode)
+// {
+// 	s_tKey.Buf[s_tKey.Write] = _KeyCode;
 
-	if (s_tKey.Read == s_tKey.Write)
-	{
-		return KEY_NONE;
-	}
-	else
-	{
-		ret = s_tKey.Buf[s_tKey.Read];
+// 	if (++s_tKey.Write  >= KEY_FIFO_SIZE)
+// 	{
+// 		s_tKey.Write = 0;
+// 	}
+// }
 
-		if (++s_tKey.Read >= KEY_FIFO_SIZE)
-		{
-			s_tKey.Read = 0;
-		}
-		return ret;
-	}
-}
+// unsigned char bsp_GetKey(void)
+// {
+// 	unsigned char ret;
 
+// 	if (s_tKey.Read == s_tKey.Write)
+// 	{
+// 		return KEY_NONE;
+// 	}
+// 	else
+// 	{
+// 		ret = s_tKey.Buf[s_tKey.Read];
+
+// 		if (++s_tKey.Read >= KEY_FIFO_SIZE)
+// 		{
+// 			s_tKey.Read = 0;
+// 		}
+// 		return ret;
+// 	}
+// }
+
+FIFO f_K;
+KEY_T s_tBtn[KEY_COUNT] = {0};
+int keyFIFOBuffer[KEY_FIFO_SIZE]={0};
 void bsp_InitKeyVar(void)
 {
 	unsigned char i;
 
 	/* 对按键FIFO读写指针清零 */
-	s_tKey.Read = 0;
-	s_tKey.Write = 0;
-//	s_tKey.Read2 = 0;
+	// s_tKey.Read = 0;
+	// s_tKey.Write = 0;
+	//	s_tKey.Read2 = 0;
+	//f_K.datas=
+
+	createQueue(&f_K,KEY_FIFO_SIZE,keyFIFOBuffer);
+
+	// f_K.head = 0;
+	// f_K.tail = 0;
+	// f_K.size = KEY_FIFO_SIZE;
 
 	/* 给每个按键结构体成员变量赋一组缺省值 */
 	for (i = 0; i < KEY_COUNT; i++)
@@ -183,10 +202,10 @@ static void bsp_DetectKey(unsigned char i)
 	KEY_T *pBtn;
 
 	
-		if (s_tBtn[i].IsKeyDownFunc == 0)
-		{
-			//printf("Fault : DetectButton(), s_tBtn[i].IsKeyDownFunc undefine");
-		}
+		// if (s_tBtn[i].IsKeyDownFunc == 0)
+		// {
+		// 	//printf("Fault : DetectButton(), s_tBtn[i].IsKeyDownFunc undefine");
+		// }
 	
 
 	pBtn = &s_tBtn[i];
@@ -207,7 +226,9 @@ static void bsp_DetectKey(unsigned char i)
 				pBtn->State = 1;
 
 				/* 发送按钮按下的消息 */
-				bsp_PutKey((unsigned char)(3 * i + 1));
+				enQueue(&f_K,3 * i + 1);            //入列
+				//bsp_PutKey((unsigned char)(3 * i + 1));
+				//KeyValue=3 * i + 1;
 			}
 
 			if (pBtn->LongTime > 0)
@@ -218,7 +239,10 @@ static void bsp_DetectKey(unsigned char i)
 					if (++pBtn->LongCount == pBtn->LongTime)
 					{
 						/* 键值放入按键FIFO */
-						bsp_PutKey((unsigned char)(3 * i + 3));
+						//bsp_PutKey((unsigned char)(3 * i + 3));
+						enQueue(&f_K,3 * i + 3);            //入列
+
+						//KeyValue=3 * i + 3;
 					}
 				}
 				else
@@ -229,7 +253,10 @@ static void bsp_DetectKey(unsigned char i)
 						{
 							pBtn->RepeatCount = 0;
 							/* 常按键后，每隔10ms发送1个按键 */
-							bsp_PutKey((unsigned char)(3 * i + 1));
+							//bsp_PutKey((unsigned char)(3 * i + 1));
+							enQueue(&f_K,3 * i + 1);            //入列
+						
+							//KeyValue=3 * i + 1;
 						}
 					}
 				}
@@ -253,7 +280,9 @@ static void bsp_DetectKey(unsigned char i)
 				pBtn->State = 0;
 
 				/* 发送按钮弹起的消息 */
-				bsp_PutKey((unsigned char)(3 * i + 2));
+				//bsp_PutKey((unsigned char)(3 * i + 2));
+				enQueue(&f_K,3 * i + 2);            //入列
+				//KeyValue=3 * i + 2;
 			}
 		}
 

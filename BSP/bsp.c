@@ -2,8 +2,8 @@
  * @Author: liubotao
  * @Date: 2022-11-18 00:32:28
  * @LastEditors: liubotao
- * @LastEditTime: 2022-11-18 02:54:30
- * @FilePath: \test51\BSP\bsp.c
+ * @LastEditTime: 2022-11-20 21:38:42
+ * @FilePath: \test_51\BSP\bsp.c
  * @Description: 中断和驱动初始化
  *
  */
@@ -13,7 +13,8 @@ static void task10ms();
 
 void bspInit()
 {
-	\]bsp_InitKeyVar();
+		bsp_InitKeyVar();
+		initLcd1602();
     timer0Init();
 	
 }
