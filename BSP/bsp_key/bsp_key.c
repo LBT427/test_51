@@ -2,13 +2,13 @@
  * @Author: liubotao
  * @Date: 2022-11-18 00:13:48
  * @LastEditors: liubotao
- * @LastEditTime: 2022-11-20 23:50:27
+ * @LastEditTime: 2022-11-21 09:54:49
  * @FilePath: \test_51\BSP\bsp_key\bsp_key.c
- * @Description: ¾ØÕó°´¼ü¼ì²â
+ * @Description: °´¼ü¼ì²âºÍ¾ØÕó°´¼ü¼ì²â
  * 
  */
+
 #include "bsp_key.h"
-#include "bsp.h"
 #include "fifo.h"
 
 

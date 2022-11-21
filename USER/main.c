@@ -2,7 +2,7 @@
  * @Author: liubotao
  * @Date: 2022-08-29 16:37:40
  * @LastEditors: liubotao
- * @LastEditTime: 2022-11-20 23:50:28
+ * @LastEditTime: 2022-11-21 09:56:38
  * @FilePath: \test_51\USER\main.c
  * @Description: æÿ’Û∞¥º¸ºÏ≤‚
  *
@@ -10,8 +10,7 @@
 #include "reg51.h"
 #include "bsp.h"
 #include "fifo.h"
-//#define uint8_t unsigned char
-//#define uint16_t unsigned short int
+
 #define key P1
 #define led P2
 extern FIFO f_K;
@@ -34,4 +33,4 @@ int main()
 		}
 	}
 }
-//“ª¥Œ≤‚ ‘    
+    

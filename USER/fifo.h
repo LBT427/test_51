@@ -2,7 +2,7 @@
  * @Author: liubotao
  * @Date: 2022-11-20 20:58:57
  * @LastEditors: liubotao
- * @LastEditTime: 2022-11-20 23:53:57
+ * @LastEditTime: 2022-11-21 10:02:09
  * @FilePath: \test_51\USER\fifo.h
  * @Description: 
  * @
@@ -10,6 +10,7 @@
 #ifndef _FIFO_H_
 #define _FIFO_H_
 
+#include "type.h"
 
 #define false 0
 #define true  1

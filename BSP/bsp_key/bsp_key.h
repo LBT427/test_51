@@ -2,16 +2,16 @@
  * @Author: liubotao
  * @Date: 2022-11-18 00:13:57
  * @LastEditors: liubotao
- * @LastEditTime: 2022-11-20 23:51:23
+ * @LastEditTime: 2022-11-21 10:01:30
  * @FilePath: \test_51\BSP\bsp_key\bsp_key.h
- * @Description: ¾ØÕó°´¼ü¼ì²â
+ * @Description: °´¼ü¼ì²âºÍ¾ØÕó°´¼ü¼ì²â
  * @
  */
 #ifndef _BSP_KEY_H_
 #define _BSP_KEY_H_
 
-#include "reg51.h"
-#include "bsp.h"
+#include "type.h"
+//#include "bsp.h"
 
 extern int KeyValue;
 int matrixKeyScan_1();
@@ -65,5 +65,6 @@ typedef struct
 void bsp_KeyScan(void);
 unsigned char bsp_GetKey(void);
 void bsp_InitKeyVar(void);
+
 
 #endif
