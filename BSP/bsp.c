@@ -2,7 +2,7 @@
  * @Author: liubotao
  * @Date: 2022-11-18 00:32:28
  * @LastEditors: liubotao
- * @LastEditTime: 2022-11-21 11:10:31
+ * @LastEditTime: 2022-11-21 12:00:41
  * @FilePath: \test_51\BSP\bsp.c
  * @Description: 中断和驱动初始化
  *
@@ -46,7 +46,7 @@ static void task5ms()      //10ms任务
 {
     // matrixKeyScan_1();
     // matrixKeyScan_2();
-    //matrixKeyScan_3();
+     matrixKeyScan_3();
      KeyValue_ind=deQueue(&f_K);
 			switch (KeyValue_ind)
 		{
