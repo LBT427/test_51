@@ -1,10 +1,11 @@
-C51 COMPILER V9.60.0.0   FIFO                                                              11/21/2022 02:38:09 PAGE 1   
+C51 COMPILER V9.60.0.0   FIFO                                                              11/21/2022 11:57:25 PAGE 1   
 
 
 C51 COMPILER V9.60.0.0, COMPILATION OF MODULE FIFO
 OBJECT MODULE PLACED IN .\Objects\fifo.obj
-COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE ..\USER\fifo.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\BSP;..\BSP\bsp_key;..\
-                    -USER;..\BSP\bsp_lcd1602) DEBUG OBJECTEXTEND PRINT(.\Listings\fifo.lst) TABS(2) OBJECT(.\Objects\fifo.obj)
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE ..\middleware\FIFO\fifo.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\BSP;..\BSP\
+                    -bsp_key;..\USER;..\BSP\bsp_lcd1602;..\middleware\FIFO;..\middleware\LIST;..\middleware) DEBUG OBJECTEXTEND PRINT(.\Listi
+                    -ngs\fifo.lst) TABS(2) OBJECT(.\Objects\fifo.obj)
 
 line level    source
 
@@ -12,110 +13,110 @@ line level    source
    2           * @Author: liubotao
    3           * @Date: 2022-11-20 20:59:01
    4           * @LastEditors: liubotao
-   5           * @LastEditTime: 2022-11-20 23:54:17
+   5           * @LastEditTime: 2022-11-21 11:53:07
    6           * @FilePath: \test_51\USER\fifo.c
-   7           * @Description: 
+   7           * @Description: Ñ­»·¶ÓÁÐ
    8           * 
    9           */
   10          #include "fifo.h"
   11          
-  12          int createQueue(FIFO *f, int fifoSize,int *buff)
+  12          int createQueue(FIFO *f, unsigned char fifoSize,unsigned char *buff)
   13          {
-  14   1          f -> datas = buff;//(int*)malloc(fifoSize * sizeof(int));
+  14   1          f -> datas = buff; //(int*)malloc(fifoSize * sizeof(int));
   15   1          f -> head = -1;
   16   1          f -> tail = -1;
   17   1          f -> sizes = fifoSize;
-  18   1      }
-  19          
-  20          int deleteQueue(FIFO *f)
-  21          {
-  22   1      
-  23   1          //free(f->datas);
-  24   1          f -> datas=0;
-  25   1          f -> head = -1;
-  26   1          f -> tail = -1;
-  27   1          f -> sizes = 0;
-  28   1      }
-  29          
-  30          
-  31          int enQueue(FIFO *f, int value)
-  32          {
-  33   1          if (isFull(f))
-  34   1          {
-  35   2              return 0;
-  36   2          }
-  37   1          if (isEmpty(f))
-  38   1          {
-  39   2              f->head = 0;
-  40   2          }
-  41   1          f->tail = (f->tail + 1) % f->sizes;
-  42   1          f->datas[f->tail] = value;
-  43   1          return 1;
-  44   1      }
-  45          
-  46          int deQueue(FIFO *f)
-  47          {
-  48   1        int temp =Front(f);
-  49   1          if (isEmpty(f))
-  50   1          {
-  51   2              return false;
-  52   2          }
-  53   1          
-  54   1          if (f->head == f->tail)
-C51 COMPILER V9.60.0.0   FIFO                                                              11/21/2022 02:38:09 PAGE 2   
+  18   1          return 1;
+  19   1      }
+  20          
+  21          int deleteQueue(FIFO *f)
+  22          {
+  23   1      
+  24   1          //free(f->datas);
+  25   1          f -> datas=0;
+  26   1          f -> head = -1;
+  27   1          f -> tail = -1;
+  28   1          f -> sizes = 0;
+  29   1          return 1;
+  30   1      }
+  31          
+  32          
+  33          int enQueue(FIFO *f, unsigned char value)
+  34          {
+  35   1          if (isFull(f))
+  36   1          {
+  37   2              return 0;
+  38   2          }
+  39   1          if (isEmpty(f))
+  40   1          {
+  41   2              f->head = 0;
+  42   2          }
+  43   1          f->tail = (f->tail + 1) % f->sizes;
+  44   1          f->datas[f->tail] = value;
+  45   1          return 1;
+  46   1      }
+  47          
+  48          int deQueue(FIFO *f)
+  49          {
+  50   1        int temp =Front(f);
+  51   1          if (isEmpty(f))
+  52   1          {
+  53   2              return false;
+C51 COMPILER V9.60.0.0   FIFO                                                              11/21/2022 11:57:25 PAGE 2   
 
-  55   1          {
-  56   2              f->head = -1;
-  57   2              f->tail = -1;
-  58   2              return temp;
-  59   2          }
-  60   1          f->head = (f->head + 1) % f->sizes;
-  61   1          return temp;
-  62   1      }
-  63          
-  64          int Front(FIFO *f)
-  65          {
-  66   1          
-  67   1          if (isEmpty(f))
-  68   1          {
-  69   2              return -1;
-  70   2          }
-  71   1          return f->datas[f->head];
-  72   1      }
-  73          int Rear(FIFO *f)
-  74          {
-  75   1          if (isEmpty(f))
-  76   1          {
-  77   2              return -1;
-  78   2          }
-  79   1          return f->datas[f->tail];
-  80   1      }
-  81          
-  82          int isEmpty(FIFO *f)
-  83          {
-  84   1          return f->head == -1;
-  85   1      }
-  86          
-  87          
-  88          int isFull(FIFO *f)
-  89          {
-  90   1          return ((f->tail + 1) % f->sizes) == f->head;
-  91   1      }
-  92          
-  93          
-*** WARNING C290 IN LINE 18 OF ..\USER\fifo.c: missing return value
-*** WARNING C290 IN LINE 28 OF ..\USER\fifo.c: missing return value
+  54   2          }
+  55   1          
+  56   1          if (f->head == f->tail)
+  57   1          {
+  58   2              f->head = -1;
+  59   2              f->tail = -1;
+  60   2              return temp;
+  61   2          }
+  62   1          f->head = (f->head + 1) % f->sizes;
+  63   1          return temp;
+  64   1      }
+  65          
+  66          int Front(FIFO *f)
+  67          {
+  68   1          
+  69   1          if (isEmpty(f))
+  70   1          {
+  71   2              return -1;
+  72   2          }
+  73   1          return f->datas[f->head];
+  74   1      }
+  75          int Rear(FIFO *f)
+  76          {
+  77   1          if (isEmpty(f))
+  78   1          {
+  79   2              return -1;
+  80   2          }
+  81   1          return f->datas[f->tail];
+  82   1      }
+  83          
+  84          int isEmpty(FIFO *f)
+  85          {
+  86   1          return f->head == -1;
+  87   1      }
+  88          
+  89          
+  90          int isFull(FIFO *f)
+  91          {
+  92   1          return ((f->tail + 1) % f->sizes) == f->head;
+  93   1      }
+  94          
+  95          
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    573    ----
+   CODE SIZE        =    593    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
-   DATA SIZE        =   ----      30
+   DATA SIZE        =   ----      28
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.
 
 
-C51 COMPILATION COMPLETE.  2 WARNING(S),  0 ERROR(S)
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,8 +1,8 @@
 ".\Objects\STARTUP.obj",
 ".\Objects\main.obj",
-".\Objects\fifo.obj",
 ".\Objects\bsp.obj",
 ".\Objects\bsp_key.obj",
-".\Objects\lcd1602.obj" 
+".\Objects\lcd1602.obj",
+".\Objects\fifo.obj" 
 TO ".\Objects\51" 
 PRINT(".\Listings\51.m51")

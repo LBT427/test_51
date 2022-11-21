@@ -2,8 +2,8 @@
  * @Author: liubotao
  * @Date: 2022-10-30 15:02:44
  * @LastEditors: liubotao
- * @LastEditTime: 2022-11-01 15:34:08
- * @FilePath: \ds1302-lcd1602\BSP\LCD\lcd1602.h
+ * @LastEditTime: 2022-11-21 10:18:57
+ * @FilePath: \test_51\BSP\bsp_lcd1602\lcd1602.h
  * @Description: 
  * @
  */
@@ -11,15 +11,13 @@
 #define __LCD1602_H_
 
 #include <reg51.h>
-
-#define uint8_t unsigned char
-#define uint16_t unsigned int
+#include "type.h"
 
 
 #define LCD1602_DB  P0     
-sbit LCD1602_RS = P2^0;
-sbit LCD1602_RW = P2^1;
-sbit LCD1602_EN = P2^2;
+sbit LCD1602_RS = P3^2;
+sbit LCD1602_RW = P3^3;
+sbit LCD1602_EN = P3^4;
 
 
 void readBusy();                                                  //Ã¦¼ì²â

@@ -2,19 +2,20 @@
  * @Author: liubotao
  * @Date: 2022-11-20 20:59:01
  * @LastEditors: liubotao
- * @LastEditTime: 2022-11-20 23:54:17
+ * @LastEditTime: 2022-11-21 11:53:07
  * @FilePath: \test_51\USER\fifo.c
- * @Description: 
+ * @Description: Ñ­»·¶ÓÁÐ
  * 
  */
 #include "fifo.h"
 
-int createQueue(FIFO *f, int fifoSize,int *buff)
+int createQueue(FIFO *f, unsigned char fifoSize,unsigned char *buff)
 {
-    f -> datas = buff;//(int*)malloc(fifoSize * sizeof(int));
+    f -> datas = buff; //(int*)malloc(fifoSize * sizeof(int));
     f -> head = -1;
     f -> tail = -1;
     f -> sizes = fifoSize;
+		return 1;
 }
 
 int deleteQueue(FIFO *f)
@@ -25,10 +26,11 @@ int deleteQueue(FIFO *f)
     f -> head = -1;
     f -> tail = -1;
     f -> sizes = 0;
+		return 1;
 }
 
 
-int enQueue(FIFO *f, int value)
+int enQueue(FIFO *f, unsigned char value)
 {
     if (isFull(f))
     {

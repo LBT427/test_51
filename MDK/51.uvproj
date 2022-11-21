@@ -324,7 +324,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>..\BSP;..\BSP\bsp_key;..\USER;..\BSP\bsp_lcd1602</IncludePath>
+              <IncludePath>..\BSP;..\BSP\bsp_key;..\USER;..\BSP\bsp_lcd1602;..\middleware\FIFO;..\middleware\LIST;..\middleware</IncludePath>
             </VariousControls>
           </C51>
           <Ax51>
@@ -386,11 +386,6 @@
               <FileType>1</FileType>
               <FilePath>..\USER\main.c</FilePath>
             </File>
-            <File>
-              <FileName>fifo.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\USER\fifo.c</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
@@ -410,6 +405,16 @@
               <FileName>lcd1602.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\BSP\bsp_lcd1602\lcd1602.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>middleware</GroupName>
+          <Files>
+            <File>
+              <FileName>fifo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\middleware\FIFO\fifo.c</FilePath>
             </File>
           </Files>
         </Group>
