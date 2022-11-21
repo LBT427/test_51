@@ -1,0 +1,6 @@
+{
+    "files.exclude": {
+        "MDK": true,
+        "仿真": true, //被禁止看见的文件/文件夹
+    }
+}
