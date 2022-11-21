@@ -1,1 +1,1 @@
-"..\BSP\bsp_key\bsp_key.c" OPTIMIZE (8,SPEED) BROWSE INCDIR(..\BSP;..\BSP\bsp_key;..\USER;..\BSP\bsp_lcd1602;..\middleware\FIFO;..\middleware\LIST;..\middleware) DEBUG OBJECTEXTEND PRINT(.\Listings\bsp_key.lst) TABS (2) OBJECT(.\Objects\bsp_key.obj)
+"..\BSP\bsp_key\bsp_key.c" OPTIMIZE (8,SPEED) BROWSE INCDIR(..\BSP;..\BSP\bsp_key;..\USER;..\BSP\bsp_lcd1602;..\middleware\FIFO;..\middleware\LIST;..\middleware;..\middleware\LIST) DEBUG OBJECTEXTEND PRINT(.\Listings\bsp_key.lst) OBJECT(.\Objects\bsp_key.obj)

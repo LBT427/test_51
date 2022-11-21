@@ -1,0 +1,1 @@
+"..\middleware\LIST\list.c" OPTIMIZE (8,SPEED) BROWSE INCDIR(..\BSP;..\BSP\bsp_key;..\USER;..\BSP\bsp_lcd1602;..\middleware\FIFO;..\middleware\LIST;..\middleware;..\middleware\LIST) DEBUG OBJECTEXTEND PRINT(.\Listings\list.lst) OBJECT(.\Objects\list.obj)

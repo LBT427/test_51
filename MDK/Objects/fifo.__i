@@ -1,1 +1,1 @@
-"..\middleware\FIFO\fifo.c" OPTIMIZE (8,SPEED) BROWSE INCDIR(..\BSP;..\BSP\bsp_key;..\USER;..\BSP\bsp_lcd1602;..\middleware\FIFO;..\middleware\LIST;..\middleware) DEBUG OBJECTEXTEND PRINT(.\Listings\fifo.lst) TABS (2) OBJECT(.\Objects\fifo.obj)
+"..\middleware\FIFO\fifo.c" OPTIMIZE (8,SPEED) BROWSE INCDIR(..\BSP;..\BSP\bsp_key;..\USER;..\BSP\bsp_lcd1602;..\middleware\FIFO;..\middleware\LIST;..\middleware;..\middleware\LIST) DEBUG OBJECTEXTEND PRINT(.\Listings\fifo.lst) OBJECT(.\Objects\fifo.obj)

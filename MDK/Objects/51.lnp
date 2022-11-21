@@ -3,6 +3,7 @@
 ".\Objects\bsp.obj",
 ".\Objects\bsp_key.obj",
 ".\Objects\lcd1602.obj",
-".\Objects\fifo.obj" 
+".\Objects\fifo.obj",
+".\Objects\list.obj" 
 TO ".\Objects\51" 
 PRINT(".\Listings\51.m51")

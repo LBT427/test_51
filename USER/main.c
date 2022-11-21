@@ -20,11 +20,10 @@ uint8_t code disBuffer[] = {0xc0, 0xf9, 0xa4, 0xb0, 0x99, 0x92, 0x82, 0xf8,
 int main()
 {
 	bspInit();
-	LcdShowStr(0,0,"hello");    			  //ÏÔÊ¾×Ö·û´®
+	LcdShowStr(0,0,"hello");    			  
 	
 	while (1)
 	{
-		//LcdShowStr(0,0,"okk");    			  //ÏÔÊ¾×Ö·û´®
 		if (KeyValue >=0 && KeyValue < 16)
 		{
 			led = disBuffer[KeyValue];

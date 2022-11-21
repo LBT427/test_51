@@ -1,0 +1,146 @@
+C51 COMPILER V9.60.0.0   LIST                                                              11/21/2022 13:20:13 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE LIST
+OBJECT MODULE PLACED IN .\Objects\list.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE ..\middleware\LIST\list.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\BSP;..\BSP\
+                    -bsp_key;..\USER;..\BSP\bsp_lcd1602;..\middleware\FIFO;..\middleware\LIST;..\middleware;..\middleware\LIST) DEBUG OBJECTE
+                    -XTEND PRINT(.\Listings\list.lst) OBJECT(.\Objects\list.obj)
+
+line level    source
+
+   1          /*
+   2           * @Author: liubotao
+   3           * @Date: 2022-11-21 12:37:04
+   4           * @LastEditors: liubotao
+   5           * @LastEditTime: 2022-11-21 12:49:47
+   6           * @FilePath: \test_51\middleware\LIST\list.c
+   7           * @Description: 抄自freertos 暂时还没用到
+   8           * 
+   9           */
+  10          //#include <stdlib.h>
+  11          #include "list.h"
+  12          
+  13          
+  14          /* 链表初始化 */
+  15          void vListInitialise( List_t * const pxList )
+  16          {
+  17   1              /* 将链表索引指针指向最后一个节点 */
+  18   1              pxList->pxIndex = ( ListItem_t * ) &( pxList->xListEnd );
+  19   1      
+  20   1              /* 将链表最后一个节点的辅助排序的值设置为最大，确保该节点就是链表的最后节点 */
+  21   1              pxList->xListEnd.xItemValue = (TickType_t)0xffffffff;
+  22   1      
+  23   1          /* 将最后一个节点的pxNext和pxPrevious指针均指向节点自身，表示链表为空 */
+  24   1              pxList->xListEnd.pxNext = ( ListItem_t * ) &( pxList->xListEnd );
+  25   1              pxList->xListEnd.pxPrevious = ( ListItem_t * ) &( pxList->xListEnd );
+  26   1      
+  27   1              /* 初始化链表节点计数器的值为0，表示链表为空 */
+  28   1              pxList->uxNumberOfItems = ( UBaseType_t ) 0U;
+  29   1      }
+  30          
+  31          /* 节点初始化 */
+  32          void vListInitialiseItem( ListItem_t * const pxItem )
+  33          {
+  34   1              /* 初始化该节点所在的链表为空，表示节点还没有插入任何链表 */
+  35   1              pxItem->pvContainer = NULL;
+  36   1      }
+  37          
+  38          
+  39          /* 将节点插入到链表的尾部 */
+  40          void vListInsertEnd( List_t * const pxList, ListItem_t * const pxNewListItem )
+  41          {
+  42   1              ListItem_t * const pxIndex = pxList->pxIndex;
+  43   1      
+  44   1              pxNewListItem->pxNext = pxIndex;
+  45   1              pxNewListItem->pxPrevious = pxIndex->pxPrevious;
+  46   1              pxIndex->pxPrevious->pxNext = pxNewListItem;
+  47   1              pxIndex->pxPrevious = pxNewListItem;
+  48   1      
+  49   1              /* 记住该节点所在的链表 */
+  50   1              pxNewListItem->pvContainer = ( void * ) pxList;
+  51   1      
+  52   1              /* 链表节点计数器++ */
+  53   1              ( pxList->uxNumberOfItems )++;
+C51 COMPILER V9.60.0.0   LIST                                                              11/21/2022 13:20:13 PAGE 2   
+
+  54   1      }
+  55          
+  56          
+  57          /* 将节点按照升序排列插入到链表 */
+  58          void vListInsert( List_t * const pxList, ListItem_t * const pxNewListItem )
+  59          {
+  60   1              ListItem_t *pxIterator;
+  61   1              
+  62   1              /* 获取节点的排序辅助值 */
+  63   1              const TickType_t xValueOfInsertion = pxNewListItem->xItemValue;
+  64   1      
+  65   1              /* 节点要插入到链表的尾部 */
+  66   1              if( xValueOfInsertion == (TickType_t)0xffffffff )
+  67   1              {
+  68   2                      pxIterator = pxList->xListEnd.pxPrevious;
+  69   2              }
+  70   1              else
+  71   1              {
+  72   2                      for( pxIterator = ( ListItem_t * ) &( pxList->xListEnd );
+  73   2                           pxIterator->pxNext->xItemValue <= xValueOfInsertion; 
+  74   2                               pxIterator = pxIterator->pxNext )
+  75   2                      {
+  76   3                              /* 没有事情可做，不断迭代只为了找到节点要插入的位置 */                  
+  77   3                      }
+  78   2              }
+  79   1      
+  80   1              pxNewListItem->pxNext = pxIterator->pxNext;
+  81   1              pxNewListItem->pxNext->pxPrevious = pxNewListItem;
+  82   1              pxNewListItem->pxPrevious = pxIterator;
+  83   1              pxIterator->pxNext = pxNewListItem;
+  84   1      
+  85   1              /* 记住该节点所在的链表 */
+  86   1              pxNewListItem->pvContainer = ( void * ) pxList;
+  87   1      
+  88   1              /* 链表节点计数器++ */
+  89   1              ( pxList->uxNumberOfItems )++;
+  90   1      }
+  91          
+  92          
+  93          /* 将节点从链表中删除 */
+  94          UBaseType_t uxListRemove( ListItem_t * const pxItemToRemove )
+  95          {
+  96   1              /* 获取节点所在的链表 */
+  97   1              List_t * const pxList = ( List_t * ) pxItemToRemove->pvContainer;
+  98   1      
+  99   1              pxItemToRemove->pxNext->pxPrevious = pxItemToRemove->pxPrevious;
+ 100   1              pxItemToRemove->pxPrevious->pxNext = pxItemToRemove->pxNext;
+ 101   1      
+ 102   1              /* Make sure the index is left pointing to a valid item. */
+ 103   1              if( pxList->pxIndex == pxItemToRemove )
+ 104   1              {
+ 105   2                      pxList->pxIndex = pxItemToRemove->pxPrevious;
+ 106   2              }
+ 107   1      
+ 108   1              /* 初始化该节点所在的链表为空，表示节点还没有插入任何链表 */
+ 109   1              pxItemToRemove->pvContainer = NULL;
+ 110   1              
+ 111   1              /* 链表节点计数器-- */
+ 112   1              ( pxList->uxNumberOfItems )--;
+ 113   1      
+ 114   1              /* 返回链表中剩余节点的个数 */
+ 115   1              return pxList->uxNumberOfItems;
+C51 COMPILER V9.60.0.0   LIST                                                              11/21/2022 13:20:13 PAGE 3   
+
+ 116   1      }
+ 117          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    724    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      30
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
