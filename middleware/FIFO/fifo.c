@@ -2,14 +2,14 @@
  * @Author: liubotao
  * @Date: 2022-11-20 20:59:01
  * @LastEditors: liubotao
- * @LastEditTime: 2022-11-21 11:53:07
- * @FilePath: \test_51\USER\fifo.c
+ * @LastEditTime: 2022-11-25 18:41:24
+ * @FilePath: \test_51\middleware\FIFO\fifo.c
  * @Description: Ñ­»·¶ÓÁĞ
  * 
  */
 #include "fifo.h"
 
-int createQueue(FIFO *f, unsigned char fifoSize,unsigned char *buff)
+int8_t createQueue(FIFO *f, uint8_t fifoSize,uint8_t *buff)
 {
     f -> datas = buff; //(int*)malloc(fifoSize * sizeof(int));
     f -> head = -1;
@@ -18,7 +18,7 @@ int createQueue(FIFO *f, unsigned char fifoSize,unsigned char *buff)
 		return 1;
 }
 
-int deleteQueue(FIFO *f)
+int8_t deleteQueue(FIFO *f)
 {
 
     //free(f->datas);
@@ -30,7 +30,7 @@ int deleteQueue(FIFO *f)
 }
 
 
-int enQueue(FIFO *f, unsigned char value)
+int8_t enQueue(FIFO *f, uint8_t value)
 {
     if (isFull(f))
     {
@@ -45,7 +45,7 @@ int enQueue(FIFO *f, unsigned char value)
     return 1;
 }
 
-int deQueue(FIFO *f)
+int8_t deQueue(FIFO *f)
 {
 	int temp =Front(f);
     if (isEmpty(f))
@@ -63,7 +63,7 @@ int deQueue(FIFO *f)
     return temp;
 }
 
-int Front(FIFO *f)
+int8_t Front(FIFO *f)
 {
     
     if (isEmpty(f))
@@ -72,7 +72,7 @@ int Front(FIFO *f)
     }
     return f->datas[f->head];
 }
-int Rear(FIFO *f)
+int8_t Rear(FIFO *f)
 {
     if (isEmpty(f))
     {
@@ -81,14 +81,15 @@ int Rear(FIFO *f)
     return f->datas[f->tail];
 }
 
-int isEmpty(FIFO *f)
+int8_t isEmpty(FIFO *f)
 {
     return f->head == -1;
 }
 
 
-int isFull(FIFO *f)
+int8_t isFull(FIFO *f)
 {
+    
     return ((f->tail + 1) % f->sizes) == f->head;
 }
 

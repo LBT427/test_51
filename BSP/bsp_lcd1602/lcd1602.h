@@ -2,7 +2,7 @@
  * @Author: liubotao
  * @Date: 2022-10-30 15:02:44
  * @LastEditors: liubotao
- * @LastEditTime: 2022-11-21 10:18:57
+ * @LastEditTime: 2022-11-27 08:07:15
  * @FilePath: \test_51\BSP\bsp_lcd1602\lcd1602.h
  * @Description: 
  * @
@@ -26,6 +26,6 @@ void lcd1602WriteData(uint8_t dat);                               //写数据
 void lcdSetCursor(uint8_t x,uint8_t y);                    		  //坐标设置
 void LcdShowStr(uint8_t x,uint8_t y,uint8_t *str);    			  //显示字符串
 void initLcd1602();                                               //1602初始化
-					  
+void currsorBlinks(uint8_t x, uint8_t y, uint8_t mode);           //光标闪烁					  
 
 #endif

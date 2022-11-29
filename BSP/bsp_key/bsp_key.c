@@ -2,19 +2,19 @@
  * @Author: liubotao
  * @Date: 2022-11-18 00:13:48
  * @LastEditors: liubotao
- * @LastEditTime: 2022-11-21 13:21:02
+ * @LastEditTime: 2022-11-29 09:14:37
  * @FilePath: \test_51\BSP\bsp_key\bsp_key.c
  * @Description: 按键检测和矩阵按键检测
  * 
  */
 
 #include "bsp.h"
-#include "fifo.h"
-
+//#include "fifo.h"
+ uint8_t  KeyVal; //全局函数，键值
 ///////////////////////////////////////////矩阵按键部分///////////////////////////////////////////////
-#define MATRIX_KEY 3
+#define MATRIX_KEY 0
 
-uint8_t KeyValue; //全局函数，键值
+
 
 #if (MATRIX_KEY == 1)
 int8_t matrixKeyScan_1() //还没加消抖
@@ -81,7 +81,7 @@ int8_t matrixKeyScan_2()
 		return -1;
 	}
 }
-#else
+#elif (MATRIX_KEY == 3)
 int8_t matrixKeyScan_3()
 {
 	static uint16_t keyDelayTime;
@@ -142,37 +142,37 @@ int8_t matrixKeyScan_3()
 //单个按键扫描函数
 static unsigned char IsKeyDown1(void) {if ((key_1) == 0) return 1;else return 0;}
 
-static unsigned char IsKeyDown2(void) {if ((key_2) == 0) return 1;else return 0;}
+//static unsigned char IsKeyDown2(void) {if ((key_2) == 0) return 1;else return 0;}
 //....
 //更多按键加在后面
 //////////////////////////////
 
-FIFO 	f_K;											//单个按键FIFO
-uint8_t keyFIFOBuffer[KEY_FIFO_SIZE]={0};   
+//FIFO 	f_K;											//单个按键FIFO
+//uint8_t keyFIFOBuffer[KEY_FIFO_SIZE]={0};   
 KEY_T 	s_tBtn[KEY_COUNT] = {0};						//按键结构体		
 void bsp_InitKeyVar(void)
 {
 	uint8_t i;
 
-	createQueue(&f_K,KEY_FIFO_SIZE,keyFIFOBuffer);	//队列初始化
+	//createQueue(&f_K,KEY_FIFO_SIZE,keyFIFOBuffer);	//队列初始化
 	//给每个按键结构体成员变量赋一组缺省值
 	for (i = 0; i < KEY_COUNT; i++)
 	{
 		s_tBtn[i].LongTime = KEY_LONG_TIME;				// 长按时间 0 表示不检测长按键事件 
 		s_tBtn[i].Count = KEY_FILTER_TIME / 2;			// 计数器设置为滤波时间的一半 
 		s_tBtn[i].State = 0;							// 按键缺省状态，0为未按下 
-		s_tBtn[i].RepeatSpeed = 0;						// 按键连发的速度，0表示不支持连发 
-		s_tBtn[i].RepeatCount = 0;						// 连发计数器 
+//		s_tBtn[i].RepeatSpeed = 0;						// 按键连发的速度，0表示不支持连发 
+//		s_tBtn[i].RepeatCount = 0;						// 连发计数器 
 	} 
 
 	////////////////////////
 	s_tBtn[0].IsKeyDownFunc = IsKeyDown1;				
-	s_tBtn[1].IsKeyDownFunc = IsKeyDown2;
+//	s_tBtn[1].IsKeyDownFunc = IsKeyDown2;
 	//....
 	//更多按键加在后面
 	///////////////////////
 }
-
+uint8_t a=0;
 static void bsp_DetectKey(unsigned char i)			//按键扫描
 {
 	KEY_T *pBtn;
@@ -200,29 +200,19 @@ static void bsp_DetectKey(unsigned char i)			//按键扫描
 			{
 				pBtn->State = 1;
 				// 发送按钮按下的消息
-				enQueue(&f_K, 3 * i + 1); //push
+				
+				//enQueue(&f_K, 3 * i + 1); //push
 			}
 
 			if (pBtn->LongTime > 0)							//长按判断
 			{
 				if (pBtn->LongCount < pBtn->LongTime)		//长按计数器小于设定的时间
 				{
-					/* 发送按钮持续按下的消息 */
 					if (++pBtn->LongCount == pBtn->LongTime)
 					{
-						enQueue(&f_K, 3 * i + 3); //push
-					}
-				}
-				else
-				{
-					if (pBtn->RepeatSpeed > 0)
-					{
-						if (++pBtn->RepeatCount >= pBtn->RepeatSpeed)
-						{
-							pBtn->RepeatCount = 0;
-							//连续按键后，每隔 x10 ms发送1个按键 
-							enQueue(&f_K, 3 * i + 1); //入列
-						}
+						KeyVal=(3 * i + 3);
+                        a=1;
+						//enQueue(&f_K, 3 * i + 3); //push
 					}
 				}
 			}
@@ -243,13 +233,18 @@ static void bsp_DetectKey(unsigned char i)			//按键扫描
 			if (pBtn->State == 1)
 			{
 				pBtn->State = 0;
-				// 发送按钮弹起的消息
-				enQueue(&f_K, 3 * i + 2); //push
+				if (a == 0)
+                {
+					KeyVal=(3 * i + 1);
+				}
+                a=0;
+				//enQueue(&f_K, 3 * i + 2); //push
 			}
+				//KeyVal=( 3 * i + 2);
 		}
 
 		pBtn->LongCount = 0;
-		pBtn->RepeatCount = 0;
+//		pBtn->RepeatCount = 0;
 	}
 }
 

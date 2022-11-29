@@ -1,1 +1,1 @@
-"..\BSP\bsp_lcd1602\lcd1602.c" OPTIMIZE (8,SPEED) BROWSE INCDIR(..\BSP;..\BSP\bsp_key;..\USER;..\BSP\bsp_lcd1602;..\middleware\FIFO;..\middleware\LIST;..\middleware;..\middleware\LIST) DEBUG OBJECTEXTEND PRINT(.\Listings\lcd1602.lst) OBJECT(.\Objects\lcd1602.obj)
+"..\BSP\bsp_lcd1602\lcd1602.c" OPTIMIZE (8,SPEED) BROWSE INCDIR(..\BSP;..\BSP\bsp_key;..\USER;..\BSP\bsp_lcd1602;..\middleware;..\middleware\EventHandler;..\BSP\DS1302;..\USER\timer) DEBUG OBJECTEXTEND PRINT(.\Listings\lcd1602.lst) OBJECT(.\Objects\lcd1602.obj)

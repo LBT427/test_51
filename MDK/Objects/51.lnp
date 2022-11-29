@@ -1,9 +1,10 @@
 ".\Objects\STARTUP.obj",
 ".\Objects\main.obj",
 ".\Objects\bsp.obj",
-".\Objects\bsp_key.obj",
 ".\Objects\lcd1602.obj",
-".\Objects\fifo.obj",
-".\Objects\list.obj" 
+".\Objects\ds1302.obj",
+".\Objects\timer.obj",
+".\Objects\bsp_key.obj",
+".\Objects\EventHandler.obj" 
 TO ".\Objects\51" 
 PRINT(".\Listings\51.m51")

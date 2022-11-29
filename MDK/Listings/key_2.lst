@@ -1,0 +1,143 @@
+C51 COMPILER V9.60.0.0   KEY_2                                                             11/28/2022 17:47:31 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE KEY_2
+OBJECT MODULE PLACED IN .\Objects\key_2.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE ..\BSP\bsp_key\key_2.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\BSP;..\BSP\bsp
+                    -_key;..\USER;..\BSP\bsp_lcd1602;..\middleware;..\middleware\EventHandler;..\BSP\DS1302;..\USER\timer) DEBUG OBJECTEXTEND
+                    - PRINT(.\Listings\key_2.lst) OBJECT(.\Objects\key_2.obj)
+
+line level    source
+
+   1          #include "bsp.h"
+   2          unsigned char KeyVal = 0;
+   3          unsigned char Count = 0;
+   4          unsigned char State = 0;
+   5          unsigned char LongTime = KEY_LONG_TIME;
+   6          unsigned char LongCount = 0;
+   7          unsigned char Double = 0;
+   8          unsigned char loose = 0;
+   9          void bsp_DetectKey(uint8_t i)
+  10          {
+  11   1          //  KEY_T *pBtn;
+  12   1      
+  13   1          /*
+  14   1              如果没有初始化按键函数，则报错
+  15   1              if (s_tBtn[i].IsKeyDownFunc == 0)
+  16   1              {
+  17   1                  printf("Fault : DetectButton(), s_tBtn[i].IsKeyDownFunc undefine");
+  18   1              }
+  19   1          */
+  20   1          // Double++;
+  21   1          // if (Double > 255)
+  22   1          // {
+  23   1          //     Double = 255;
+  24   1          // }
+  25   1          if (State == 1 && (++Double) == KEY_DOUBLE_TIME && loose != 0)
+  26   1          {
+  27   2              // State = 1;
+  28   2              KeyVal = KEY_1_DOWN;
+  29   2              State = 0;
+  30   2              loose = 0;
+  31   2          }
+  32   1          // pBtn = &s_tBtn[i];
+  33   1          if (GPIO_PIN_K1==0)
+  34   1          {
+  35   2              if (Count < KEY_FILTER_TIME)
+  36   2              {
+  37   3                  Count = KEY_FILTER_TIME;
+  38   3              }
+  39   2              else if (Count < 2 * KEY_FILTER_TIME)
+  40   2              {
+  41   3                  Count++;
+  42   3              }
+  43   2              else //按下
+  44   2              {
+  45   3                 // Double = 0;
+  46   3      
+  47   3                  // if (State == 1 && loose != 0)
+  48   3                  // {
+  49   3      
+  50   3                  //     KeyVal = KEY_1_Double;
+  51   3                  //     loose = 0;
+  52   3                  //     State = 3;
+  53   3                  //     // break;
+C51 COMPILER V9.60.0.0   KEY_2                                                             11/28/2022 17:47:31 PAGE 2   
+
+  54   3                  // }
+  55   3      
+  56   3                  if (State == 0)
+  57   3                  {
+  58   4                      State = 1;
+  59   4      
+  60   4                      /* 发送按钮按下的消息 */
+  61   4                      //
+  62   4                      // bsp_PutKey((uint8_t)(3 * i + 1));
+  63   4                  }
+  64   3                  // else if (Double > KEY_DOUBLE_TIME)
+  65   3                  // {
+  66   3                  //  State = 1;
+  67   3                  //  bsp_PutKey((uint8_t)(3 * i + 1));
+  68   3                  // }
+  69   3      
+  70   3                  else if (LongCount < KEY_LONG_TIME)
+  71   3                  {
+  72   4                      /* 发送按钮持续按下的消息 */
+  73   4                      if (++LongCount == KEY_LONG_TIME)
+  74   4                      {
+  75   5                          /* 键值放入按键FIFO */
+  76   5                          KeyVal = KEY_1_LONG;
+  77   5                          State = 3;
+  78   5                          loose = 0;
+  79   5                          // bsp_PutKey((uint8_t)(3 * i + 3));
+  80   5                      }
+  81   4                  }
+  82   3              }
+  83   2          }
+  84   1          else
+  85   1          {
+  86   2              if (Count > KEY_FILTER_TIME)
+  87   2              {
+  88   3                  Count = KEY_FILTER_TIME;
+  89   3              }
+  90   2              else if (Count != 0)
+  91   2              {
+  92   3                  Count--;
+  93   3              }
+  94   2              else
+  95   2              {
+  96   3                  if (State == 3)
+  97   3                  {
+  98   4                      State = 0;
+  99   4                  }
+ 100   3                  if (State == 1)
+ 101   3                  {
+ 102   4      
+ 103   4                      loose = 1;
+ 104   4                      /* 发送按钮弹起的消息 */
+ 105   4                      KeyVal = KEY_1_UP;
+ 106   4                      LongCount = 0;
+ 107   4                      // bsp_PutKey((uint8_t)(3 * i + 2));
+ 108   4                  }
+ 109   3              }
+ 110   2      
+ 111   2              // RepeatCount = 0;
+ 112   2          }
+ 113   1      }
+*** WARNING C280 IN LINE 9 OF ..\BSP\bsp_key\key_2.c: 'i': unreferenced local variable
+
+C51 COMPILER V9.60.0.0   KEY_2                                                             11/28/2022 17:47:31 PAGE 3   
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    145    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      7       1
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)

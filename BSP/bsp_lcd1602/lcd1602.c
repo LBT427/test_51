@@ -2,13 +2,22 @@
  * @Author: liubotao
  * @Date: 2022-10-30 15:02:33
  * @LastEditors: liubotao
- * @LastEditTime: 2022-10-31 10:13:44
- * @FilePath: \ds1302-lcd1602\BSP\LCD\lcd1602.c
+ * @LastEditTime: 2022-11-27 18:47:25
+ * @FilePath: \test_51\BSP\bsp_lcd1602\lcd1602.c
  * @Description: 
  * 
  */
 #include "lcd1602.h"
+#include "intrins.h"
+// void Delay200us()		//@12.000MHz
+// {
+// 	unsigned char i;
 
+
+// 	_nop_();
+// 	i = 10;
+// 	while (--i);
+// }
 void readBusy()           
 {
     uint8_t sta;      
@@ -56,11 +65,21 @@ void lcdSetCursor(uint8_t x,uint8_t y)
 
 void LcdShowStr(uint8_t x,uint8_t y,uint8_t *str)     
 {
+    lcd1602WriteCmd(0x0c);
     lcdSetCursor(x,y);      
     while(*str != '\0')
     {
         lcd1602WriteData(*str++);
     }
+}
+
+void currsorBlinks(uint8_t x, uint8_t y, uint8_t mode)
+{
+    lcdSetCursor(x, y);
+    if (mode == 1)
+        lcd1602WriteCmd(0x0f);
+    else
+        lcd1602WriteCmd(0x0c);
 }
 
 void initLcd1602()              

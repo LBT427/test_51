@@ -324,7 +324,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>..\BSP;..\BSP\bsp_key;..\USER;..\BSP\bsp_lcd1602;..\middleware\FIFO;..\middleware\LIST;..\middleware;..\middleware\LIST</IncludePath>
+              <IncludePath>..\BSP;..\BSP\bsp_key;..\USER;..\BSP\bsp_lcd1602;..\middleware;..\middleware\EventHandler;..\BSP\DS1302;..\USER\timer</IncludePath>
             </VariousControls>
           </C51>
           <Ax51>
@@ -397,14 +397,24 @@
               <FilePath>..\BSP\bsp.c</FilePath>
             </File>
             <File>
-              <FileName>bsp_key.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\BSP\bsp_key\bsp_key.c</FilePath>
-            </File>
-            <File>
               <FileName>lcd1602.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\BSP\bsp_lcd1602\lcd1602.c</FilePath>
+            </File>
+            <File>
+              <FileName>ds1302.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\BSP\DS1302\ds1302.c</FilePath>
+            </File>
+            <File>
+              <FileName>timer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\USER\timer\timer.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_key.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\BSP\bsp_key\bsp_key.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -412,14 +422,9 @@
           <GroupName>middleware</GroupName>
           <Files>
             <File>
-              <FileName>fifo.c</FileName>
+              <FileName>EventHandler.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\middleware\FIFO\fifo.c</FilePath>
-            </File>
-            <File>
-              <FileName>list.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\middleware\LIST\list.c</FilePath>
+              <FilePath>..\middleware\EventHandler\EventHandler.c</FilePath>
             </File>
           </Files>
         </Group>

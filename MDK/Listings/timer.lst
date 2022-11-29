@@ -1,0 +1,258 @@
+C51 COMPILER V9.60.0.0   TIMER                                                             11/28/2022 16:20:07 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE TIMER
+OBJECT MODULE PLACED IN .\Objects\timer.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE ..\USER\timer\timer.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\BSP;..\BSP\bsp_
+                    -key;..\USER;..\BSP\bsp_lcd1602;..\middleware;..\middleware\EventHandler;..\BSP\DS1302;..\USER\timer) DEBUG OBJECTEXTEND 
+                    -PRINT(.\Listings\timer.lst) OBJECT(.\Objects\timer.obj)
+
+line level    source
+
+   1          /*
+   2           * @Author: liubotao
+   3           * @Date: 2022-11-05 16:40:34
+   4           * @LastEditors: liubotao
+   5           * @LastEditTime: 2022-11-28 16:09:17
+   6           * @FilePath: \test_51\USER\timer\timer.c
+   7           * @Description: 
+   8           * 
+   9           */
+  10          #include "timer.h"
+  11          
+  12          #define BCDTODEC(bcd) ((bcd) = (bcd-(bcd>>4)*6))
+  13          #define DECTOBCD(dec) ((dec) = (dec+(dec/10)*6))
+  14          
+  15          //void  setTimer(TIMER_T *time,uint8_t  modes,uint16_t num)
+  16          //{
+  17          //    time->setMode=modes;
+  18          //    time->timeBuffer[modes]=num;
+  19          //}
+  20          void  modeIncident(TIMER_T *time)
+  21          {
+  22   1          uint8_t  timBuf[7]={0};
+  23   1          uint8_t  num;
+  24   1          //time->displayClear();
+  25   1          time->rANDw= ~(time->rANDw);
+  26   1      
+  27   1          if (time->rANDw == 0)
+  28   1          {
+  29   2              for (num = 0; num < 7; num++)
+  30   2              {
+  31   3                  timBuf[num]=time->timeBuffer[num];     
+  32   3              }
+  33   2              time->timerWrite(timBuf);  
+  34   2          }
+  35   1          else
+  36   1          {
+  37   2              time->timerRead(timBuf);
+  38   2              for (num = 0; num < 7; num++)
+  39   2              {
+  40   3                  time->timeBuffer[num]=timBuf[num];
+  41   3                  
+  42   3              }
+  43   2          }
+  44   1      }
+  45          void  switchIncident(TIMER_T *time)
+  46          {
+  47   1          //time->displayClear();
+  48   1          if (time->rANDw!=TIMSHOW)
+  49   1          {
+  50   2              time->setMode++;
+  51   2              if (time->setMode==5)time->setMode=6;
+  52   2              if (time->setMode > 6)
+  53   2              {
+C51 COMPILER V9.60.0.0   TIMER                                                             11/28/2022 16:20:07 PAGE 2   
+
+  54   3                  time->setMode=0;
+  55   3              }
+  56   2              
+  57   2          }
+  58   1      }
+  59          
+  60          void  addIncident(TIMER_T *time)
+  61          {
+  62   1          uint8_t num1;
+  63   1          if (time->rANDw != TIMSHOW)
+  64   1          {
+  65   2              num1 = time->timeBuffer[time->setMode];
+  66   2              BCDTODEC(num1);
+  67   2              num1++;
+  68   2              if (time->setMode == 3)
+  69   2              {
+  70   3                  if (num1 > 31)
+  71   3                      num1 = 1;
+  72   3              }
+  73   2              else if (time->setMode == 4)
+  74   2              {
+  75   3                  if (num1 > 12)
+  76   3                      num1 = 1;
+  77   3              }
+  78   2              else if (time->setMode == 2)
+  79   2              {
+  80   3                  if (num1 > 24)
+  81   3                      num1 = 0;
+  82   3              }
+  83   2              else if (time->setMode == 6)
+  84   2              {
+  85   3                  if (num1 > 99)
+  86   3                      num1 = 0;
+  87   3              }
+  88   2              else if (time->setMode < 2)
+  89   2              {
+  90   3                  if (num1 > 60)
+  91   3                      num1 = 0;
+  92   3              }
+  93   2              DECTOBCD(num1);
+  94   2              
+  95   2              
+  96   2              time->timeBuffer[time->setMode]=num1;
+  97   2              //time->refreshClock(time);
+  98   2          }
+  99   1          //time->displayClear();
+ 100   1      }
+ 101          void  subIncident(TIMER_T *time)
+ 102          {
+ 103   1          uint8_t  num1;
+ 104   1          if (time->rANDw!=TIMSHOW)
+ 105   1          {
+ 106   2              num1=time->timeBuffer[time->setMode];
+ 107   2              BCDTODEC(num1);
+ 108   2              if(num1>0)num1--;
+ 109   2              DECTOBCD(num1);
+ 110   2              time->timeBuffer[time->setMode]=num1;
+ 111   2              //time->refreshClock(time);
+ 112   2          }
+ 113   1              //time->displayClear();
+ 114   1      }
+ 115          
+C51 COMPILER V9.60.0.0   TIMER                                                             11/28/2022 16:20:07 PAGE 3   
+
+ 116          // void  showIncident(TIMER_T *time)
+ 117          // {
+ 118          //     if (time->rANDw==TIMSHOW)
+ 119          //     {
+ 120          //         time->displayWrite(12, 0, "Show");
+ 121          //         time->refreshClock(time);
+ 122          //     }
+ 123          //     else
+ 124          //     {
+ 125          //         //time->displayBlinks(0, 0, 0);
+ 126          //         time->showClock(time);
+ 127          
+ 128          //         time->displayWrite(12, 0, "Set");
+ 129          
+ 130          //         switch (time->setMode)
+ 131          //         {
+ 132          //         case second:
+ 133          //             //time->displayWrite(6, 0, " ");
+ 134          //             // time->displayBlinks(7, 0, 1);
+ 135          //             // time->displayBlinks(6, 0, 1);
+ 136          //             //time->displayWrite(11, 1, "second");
+ 137          //             time->displayWrite(6, 0, "  ");
+ 138          //             break;
+ 139          //         case minute:
+ 140          //             // time->displayBlinks(4, 0, 1);
+ 141          //             // time->displayBlinks(3, 0, 1);
+ 142          //             time->displayWrite(3, 0, "  ");
+ 143          //             //time->displayWrite(11, 1, "minute");
+ 144          //             break;
+ 145          //         case hour:
+ 146          //             // time->displayBlinks(1, 0, 1);
+ 147          //             // time->displayWrite(0, 0, "  ");
+ 148          //             //time->displayWrite(11, 1, "hour");
+ 149          //             break;
+ 150          //         case day:
+ 151          //             // time->displayBlinks(7, 1, 1);
+ 152          //             // time->displayBlinks(6, 1, 1);
+ 153          //             time->displayWrite(6, 1, "  ");
+ 154          //             //time->displayWrite(11, 1, "day");
+ 155          //             break;
+ 156          //         case month:
+ 157          //             // time->displayBlinks(4, 1, 1);
+ 158          //             // time->displayBlinks(3, 1, 1);
+ 159          //             time->displayWrite(3, 1, "  ");
+ 160          //             //time->displayWrite(11, 1, "month");
+ 161          //             break;
+ 162          //         case year:
+ 163          //             // time->displayBlinks(1, 1, 1);
+ 164          //             // time->displayBlinks(0, 1, 1);
+ 165          //             time->displayWrite(0, 1, "  ");
+ 166          //             //time->displayWrite(11, 1, "year");
+ 167          //             break;
+ 168          //         default:
+ 169          //             time->displayWrite(11, 1, "err");
+ 170          //             break;
+ 171                      
+ 172          //         }
+ 173          //     }
+ 174          // }
+ 175          
+ 176          
+ 177          
+C51 COMPILER V9.60.0.0   TIMER                                                             11/28/2022 16:20:07 PAGE 4   
+
+ 178          
+ 179          
+ 180          
+ 181          
+ 182          
+ 183          void  showIncident(TIMER_T *time)
+ 184          {
+ 185   1          time->num+=100;
+ 186   1          if (time->rANDw==TIMSHOW)
+ 187   1          {
+ 188   2              time->refreshClock(time);
+ 189   2          }
+ 190   1          else
+ 191   1          {
+ 192   2              if (time->num > 500)
+ 193   2              {
+ 194   3                  //time->num=0;
+ 195   3                  switch (time->setMode)
+ 196   3                  {
+ 197   4                  case second:
+ 198   4                      time->displayWrite(6, 0, "  ");
+ 199   4                      break;
+ 200   4                  case minute:
+ 201   4                      time->displayWrite(3, 0, "  ");
+ 202   4                      break;
+ 203   4                  case hour:
+ 204   4                      time->displayWrite(0, 0, "  ");
+ 205   4                      break;
+ 206   4                  case day:
+ 207   4                      time->displayWrite(6, 1, "  ");
+ 208   4                      break;
+ 209   4                  case month:
+ 210   4                      time->displayWrite(3, 1, "  ");
+ 211   4                      break;
+ 212   4                  case year:
+ 213   4      
+ 214   4                      time->displayWrite(0, 1, "  ");
+ 215   4                      break;
+ 216   4                  default:
+ 217   4                      time->displayWrite(11, 1, "err");
+ 218   4                      break;
+ 219   4                  }
+ 220   3              }
+ 221   2              if(time->num > 1000)
+ 222   2              {
+ 223   3                  time->num=0;
+ 224   3                  time->showClock(time);
+ 225   3              }
+ 226   2          }
+ 227   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1033    ----
+   CONSTANT SIZE    =     14    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      20
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

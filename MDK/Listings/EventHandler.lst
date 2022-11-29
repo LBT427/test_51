@@ -1,0 +1,125 @@
+C51 COMPILER V9.60.0.0   EVENTHANDLER                                                      11/28/2022 16:30:31 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE EVENTHANDLER
+OBJECT MODULE PLACED IN .\Objects\EventHandler.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE ..\middleware\EventHandler\EventHandler.c OPTIMIZE(8,SPEED) BROWSE INCDI
+                    -R(..\BSP;..\BSP\bsp_key;..\USER;..\BSP\bsp_lcd1602;..\middleware;..\middleware\EventHandler;..\BSP\DS1302;..\USER\timer)
+                    - DEBUG OBJECTEXTEND PRINT(.\Listings\EventHandler.lst) OBJECT(.\Objects\EventHandler.obj)
+
+line level    source
+
+   1          /*
+   2           * @Author: liubotao
+   3           * @Date: 2022-11-24 12:21:37
+   4           * @LastEditors: liubotao
+   5           * @LastEditTime: 2022-11-26 20:19:34
+   6           * @FilePath: \test_51\middleware\EventHandler\EventHandler.c
+   7           * @Description: 
+   8           * 
+   9           */
+  10          #include "EventHandler.h"
+  11          
+  12          
+  13          //先模拟一个事件函数
+  14          
+  15          /*按键1 事件  参数1为 事件参数 参数二为 模式，读还是写，
+  16              读就是 处理器判断事件是否产生
+  17              写就是 事件产生后调用这个函数
+  18          */
+  19          // event_t key1Message(EVEN_T *pEven,event_t val)
+  20          // {
+  21          
+  22          //         pEven->eventBuffer[/*优先级*/] == ENABLE;
+  23             
+  24          // }
+  25          
+  26          
+  27          
+  28          // event_t lcdEven() //事件
+  29          // {
+  30          
+  31          
+  32          // }
+  33          // 扫描器
+  34          void evenTrigger(EVEN_T *pEven)
+  35          {
+  36   1          event_t i=0;
+  37   1          
+  38   1          
+  39   1          for ( i = 0; i < (pEven->sizes); i++)
+  40   1          {
+  41   2             // if (pEven->pMessageFun[i]()== 0) continue;
+  42   2              
+  43   2              if (pEven->pMessageFun[i]()== eNABLE)
+  44   2              {
+  45   3                  //pEven->eventBuffer[i] = eNABLE;
+  46   3                  pEven->pEventFun[i]();
+  47   3              }
+  48   2              // else
+  49   2              //     pEven->eventBuffer[i] == DISABLE;
+  50   2              //pEven->hand=i;
+  51   2          }
+  52   1      
+  53   1      //    for ( i = 0; i < (pEven->sizes); i++)
+C51 COMPILER V9.60.0.0   EVENTHANDLER                                                      11/28/2022 16:30:31 PAGE 2   
+
+  54   1      //    {
+  55   1      //        if (pEven->eventBuffer[i] == eNABLE)
+  56   1      //        {
+  57   1      //            pEven->pEventFun[i]();
+  58   1      //        }
+  59   1      //        //pEven->read=i;
+  60   1      //    }
+  61   1          
+  62   1      }
+  63          
+  64          //连接器 连接消息和事件
+  65          event_t evenConnector(EVEN_T *pEven,
+  66                             event_t (*pMessagef)(),
+  67                             event_t (*pEvenf)(void),
+  68                             event_t priority)
+  69          {
+  70   1          if (pEven->pMessageFun[priority] !=0 && priority > pEven->sizes)
+  71   1          {
+  72   2             return ERROR;
+  73   2          }
+  74   1          
+  75   1          pEven->pMessageFun[priority]=pMessagef;
+  76   1          pEven->pEventFun[priority]=pEvenf;
+  77   1          
+  78   1      }
+  79          
+  80          //初始化
+  81          
+  82          void EnevHancleInit(EVEN_T *pEven)
+  83          {
+  84   1          event_t i;
+  85   1      
+  86   1          pEven->sizes = EVENNUM;
+  87   1          //pEven->hand = 0;
+  88   1          //pEven->read = 0;
+  89   1        
+  90   1          for (i = 0; i < EVENNUM; i++)
+  91   1          {
+  92   2              pEven->pMessageFun[i] = 0;
+  93   2              pEven->pEventFun[i] = 0;
+  94   2      //        pEven->eventBuffer[i] = 0;
+  95   2          }
+  96   1      
+  97   1      }
+*** WARNING C291 IN LINE 78 OF ..\middleware\EventHandler\EventHandler.c: not every exit path returns a value
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    274    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      17
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)

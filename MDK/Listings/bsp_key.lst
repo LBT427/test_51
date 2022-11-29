@@ -1,11 +1,11 @@
-C51 COMPILER V9.60.0.0   BSP_KEY                                                           11/21/2022 13:20:12 PAGE 1   
+C51 COMPILER V9.60.0.0   BSP_KEY                                                           11/29/2022 09:15:39 PAGE 1   
 
 
 C51 COMPILER V9.60.0.0, COMPILATION OF MODULE BSP_KEY
 OBJECT MODULE PLACED IN .\Objects\bsp_key.obj
 COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE ..\BSP\bsp_key\bsp_key.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\BSP;..\BSP\b
-                    -sp_key;..\USER;..\BSP\bsp_lcd1602;..\middleware\FIFO;..\middleware\LIST;..\middleware;..\middleware\LIST) DEBUG OBJECTEX
-                    -TEND PRINT(.\Listings\bsp_key.lst) OBJECT(.\Objects\bsp_key.obj)
+                    -sp_key;..\USER;..\BSP\bsp_lcd1602;..\middleware;..\middleware\EventHandler;..\BSP\DS1302;..\USER\timer) DEBUG OBJECTEXTE
+                    -ND PRINT(.\Listings\bsp_key.lst) OBJECT(.\Objects\bsp_key.obj)
 
 line level    source
 
@@ -13,19 +13,19 @@ line level    source
    2           * @Author: liubotao
    3           * @Date: 2022-11-18 00:13:48
    4           * @LastEditors: liubotao
-   5           * @LastEditTime: 2022-11-21 13:12:27
+   5           * @LastEditTime: 2022-11-29 09:14:37
    6           * @FilePath: \test_51\BSP\bsp_key\bsp_key.c
    7           * @Description: 按键检测和矩阵按键检测
    8           * 
    9           */
   10          
   11          #include "bsp.h"
-  12          #include "fifo.h"
-  13          
+  12          //#include "fifo.h"
+  13           uint8_t  KeyVal; //全局函数，键值
   14          ///////////////////////////////////////////矩阵按键部分///////////////////////////////////////////////
-  15          #define MATRIX_KEY 3
+  15          #define MATRIX_KEY 0
   16          
-  17          uint8_t KeyValue; //全局函数，键值
+  17          
   18          
   19          #if (MATRIX_KEY == 1)
               int8_t matrixKeyScan_1() //还没加消抖
@@ -62,7 +62,7 @@ line level    source
                               0xDE, 0xDD, 0xDB, 0xBB,
                               0xBE, 0xBD, 0xBB, 0xB7,
                               0x7E, 0x7D, 0x7B, 0x77};
-C51 COMPILER V9.60.0.0   BSP_KEY                                                           11/21/2022 13:20:12 PAGE 2   
+C51 COMPILER V9.60.0.0   BSP_KEY                                                           11/29/2022 09:15:39 PAGE 2   
 
               int8_t matrixKeyScan_2()
               {
@@ -94,60 +94,60 @@ line level    source
                               return -1;
                       }
               }
-              #else
-  85          int8_t matrixKeyScan_3()
-  86          {
-  87   1              static uint16_t keyDelayTime;
-  88   1              keyboard = 0x0f;
-  89   1              if (keyboard != 0x0f)
-  90   1              {
-  91   2                      keyDelayTime++;
-  92   2                      if (keyDelayTime > keyUncertainTime)
-  93   2                      {
-  94   3                              keyboard = 0X0F;
-  95   3                              switch (keyboard)
-  96   3                              {
-  97   4                              case (0X0E):
-  98   4                                      KeyValue = 0;
-  99   4                                      break;
- 100   4                              case (0X0D):
- 101   4                                      KeyValue = 1;
- 102   4                                      break;
- 103   4                              case (0X0B):
- 104   4                                      KeyValue = 2;
- 105   4                                      break;
- 106   4                              case (0X07):
- 107   4                                      KeyValue = 3;
- 108   4                                      break;
- 109   4                              }
- 110   3                              keyboard = 0XF0;
- 111   3                              switch (keyboard)
- 112   3                              {
- 113   4                              case (0XE0):
- 114   4                                      KeyValue = KeyValue;
- 115   4                                      break;
-C51 COMPILER V9.60.0.0   BSP_KEY                                                           11/21/2022 13:20:12 PAGE 3   
+              #elif (MATRIX_KEY == 3)
+              int8_t matrixKeyScan_3()
+              {
+                      static uint16_t keyDelayTime;
+                      keyboard = 0x0f;
+                      if (keyboard != 0x0f)
+                      {
+                              keyDelayTime++;
+                              if (keyDelayTime > keyUncertainTime)
+                              {
+                                      keyboard = 0X0F;
+                                      switch (keyboard)
+                                      {
+                                      case (0X0E):
+                                              KeyValue = 0;
+                                              break;
+                                      case (0X0D):
+                                              KeyValue = 1;
+                                              break;
+                                      case (0X0B):
+                                              KeyValue = 2;
+                                              break;
+                                      case (0X07):
+                                              KeyValue = 3;
+                                              break;
+                                      }
+                                      keyboard = 0XF0;
+                                      switch (keyboard)
+                                      {
+                                      case (0XE0):
+                                              KeyValue = KeyValue;
+                                              break;
+C51 COMPILER V9.60.0.0   BSP_KEY                                                           11/29/2022 09:15:39 PAGE 3   
 
- 116   4                              case (0XD0):
- 117   4                                      KeyValue = KeyValue + 4;
- 118   4                                      break;
- 119   4                              case (0XB0):
- 120   4                                      KeyValue = KeyValue + 8;
- 121   4                                      break;
- 122   4                              case (0X70):
- 123   4                                      KeyValue = KeyValue + 12;
- 124   4                                      break;
- 125   4                              }
- 126   3                      }
- 127   2                      return KeyValue;
- 128   2              }
- 129   1              else
- 130   1              {
- 131   2                      keyDelayTime = 0;
- 132   2                      return -1;
- 133   2              }
- 134   1      }
- 135          #endif
+                                      case (0XD0):
+                                              KeyValue = KeyValue + 4;
+                                              break;
+                                      case (0XB0):
+                                              KeyValue = KeyValue + 8;
+                                              break;
+                                      case (0X70):
+                                              KeyValue = KeyValue + 12;
+                                              break;
+                                      }
+                              }
+                              return KeyValue;
+                      }
+                      else
+                      {
+                              keyDelayTime = 0;
+                              return -1;
+                      }
+              }
+              #endif
  136          
  137          
  138          
@@ -157,40 +157,40 @@ line level    source
  142          //单个按键扫描函数
  143          static unsigned char IsKeyDown1(void) {if ((key_1) == 0) return 1;else return 0;}
  144          
- 145          static unsigned char IsKeyDown2(void) {if ((key_2) == 0) return 1;else return 0;}
+ 145          //static unsigned char IsKeyDown2(void) {if ((key_2) == 0) return 1;else return 0;}
  146          //....
  147          //更多按键加在后面
  148          //////////////////////////////
  149          
- 150          FIFO    f_K;                                                                                    //单个按键FIFO
- 151          uint8_t keyFIFOBuffer[KEY_FIFO_SIZE]={0};   
+ 150          //FIFO  f_K;                                                                                    //单个按键FIFO
+ 151          //uint8_t keyFIFOBuffer[KEY_FIFO_SIZE]={0};   
  152          KEY_T   s_tBtn[KEY_COUNT] = {0};                                                //按键结构体            
  153          void bsp_InitKeyVar(void)
  154          {
  155   1              uint8_t i;
  156   1      
- 157   1              createQueue(&f_K,KEY_FIFO_SIZE,keyFIFOBuffer);  //队列初始化
+ 157   1              //createQueue(&f_K,KEY_FIFO_SIZE,keyFIFOBuffer);        //队列初始化
  158   1              //给每个按键结构体成员变量赋一组缺省值
  159   1              for (i = 0; i < KEY_COUNT; i++)
  160   1              {
  161   2                      s_tBtn[i].LongTime = KEY_LONG_TIME;                             // 长按时间 0 表示不检测长按键事件 
  162   2                      s_tBtn[i].Count = KEY_FILTER_TIME / 2;                  // 计数器设置为滤波时间的一半 
  163   2                      s_tBtn[i].State = 0;                                                    // 按键缺省状态，0为未按下 
- 164   2                      s_tBtn[i].RepeatSpeed = 0;                                              // 按键连发的速度，0表示不支持连发 
- 165   2                      s_tBtn[i].RepeatCount = 0;                                              // 连发计数器 
+ 164   2      //              s_tBtn[i].RepeatSpeed = 0;                                              // 按键连发的速度，0表示不支持连发 
+ 165   2      //              s_tBtn[i].RepeatCount = 0;                                              // 连发计数器 
  166   2              } 
  167   1      
  168   1              ////////////////////////
  169   1              s_tBtn[0].IsKeyDownFunc = IsKeyDown1;                           
- 170   1              s_tBtn[1].IsKeyDownFunc = IsKeyDown2;
+ 170   1      //      s_tBtn[1].IsKeyDownFunc = IsKeyDown2;
  171   1              //....
  172   1              //更多按键加在后面
  173   1              ///////////////////////
  174   1      }
- 175          
+ 175          uint8_t a=0;
  176          static void bsp_DetectKey(unsigned char i)                      //按键扫描
  177          {
-C51 COMPILER V9.60.0.0   BSP_KEY                                                           11/21/2022 13:20:12 PAGE 4   
+C51 COMPILER V9.60.0.0   BSP_KEY                                                           11/29/2022 09:15:39 PAGE 4   
 
  178   1              KEY_T *pBtn;
  179   1      
@@ -217,80 +217,73 @@ line level    source
  200   3                              {
  201   4                                      pBtn->State = 1;
  202   4                                      // 发送按钮按下的消息
- 203   4                                      enQueue(&f_K, 3 * i + 1); //push
- 204   4                              }
- 205   3      
- 206   3                              if (pBtn->LongTime > 0)                                                 //长按判断
- 207   3                              {
- 208   4                                      if (pBtn->LongCount < pBtn->LongTime)           //长按计数器小于设定的时间
- 209   4                                      {
- 210   5                                              /* 发送按钮持续按下的消息 */
+ 203   4                                      
+ 204   4                                      //enQueue(&f_K, 3 * i + 1); //push
+ 205   4                              }
+ 206   3      
+ 207   3                              if (pBtn->LongTime > 0)                                                 //长按判断
+ 208   3                              {
+ 209   4                                      if (pBtn->LongCount < pBtn->LongTime)           //长按计数器小于设定的时间
+ 210   4                                      {
  211   5                                              if (++pBtn->LongCount == pBtn->LongTime)
  212   5                                              {
- 213   6                                                      enQueue(&f_K, 3 * i + 3); //push
- 214   6                                              }
- 215   5                                      }
- 216   4                                      else
- 217   4                                      {
- 218   5                                              if (pBtn->RepeatSpeed > 0)
- 219   5                                              {
- 220   6                                                      if (++pBtn->RepeatCount >= pBtn->RepeatSpeed)
- 221   6                                                      {
- 222   7                                                              pBtn->RepeatCount = 0;
- 223   7                                                              //连续按键后，每隔 x10 ms发送1个按键 
- 224   7                                                              enQueue(&f_K, 3 * i + 1); //入列
- 225   7                                                      }
- 226   6                                              }
- 227   5                                      }
- 228   4                              }
- 229   3                      }
- 230   2              }
- 231   1              else                                                                            //松开
- 232   1              {
- 233   2                      if (pBtn->Count > KEY_FILTER_TIME)      //计数器大于设定时间就是抖动
- 234   2                      {
- 235   3                              pBtn->Count = KEY_FILTER_TIME;
- 236   3                      }
- 237   2                      else if (pBtn->Count != 0)
- 238   2                      {
- 239   3                              pBtn->Count--;
-C51 COMPILER V9.60.0.0   BSP_KEY                                                           11/21/2022 13:20:12 PAGE 5   
+ 213   6                                                      KeyVal=(3 * i + 3);
+ 214   6                              a=1;
+ 215   6                                                      //enQueue(&f_K, 3 * i + 3); //push
+ 216   6                                              }
+ 217   5                                      }
+ 218   4                              }
+ 219   3                      }
+ 220   2              }
+ 221   1              else                                                                            //松开
+ 222   1              {
+ 223   2                      if (pBtn->Count > KEY_FILTER_TIME)      //计数器大于设定时间就是抖动
+ 224   2                      {
+ 225   3                              pBtn->Count = KEY_FILTER_TIME;
+ 226   3                      }
+ 227   2                      else if (pBtn->Count != 0)
+ 228   2                      {
+ 229   3                              pBtn->Count--;
+ 230   3                      }
+ 231   2                      else                                                                    //真的松开了
+ 232   2                      {
+ 233   3                              if (pBtn->State == 1)
+ 234   3                              {
+ 235   4                                      pBtn->State = 0;
+ 236   4                                      if (a == 0)
+ 237   4                      {
+ 238   5                                              KeyVal=(3 * i + 1);
+ 239   5                                      }
+C51 COMPILER V9.60.0.0   BSP_KEY                                                           11/29/2022 09:15:39 PAGE 5   
 
- 240   3                      }
- 241   2                      else                                                                    //真的松开了
- 242   2                      {
- 243   3                              if (pBtn->State == 1)
- 244   3                              {
- 245   4                                      pBtn->State = 0;
- 246   4                                      // 发送按钮弹起的消息
- 247   4                                      enQueue(&f_K, 3 * i + 2); //push
- 248   4                              }
- 249   3                      }
- 250   2      
- 251   2                      pBtn->LongCount = 0;
- 252   2                      pBtn->RepeatCount = 0;
- 253   2              }
- 254   1      }
- 255          
- 256          void bsp_KeyScan(void)  //扫描全部按键
- 257          {
- 258   1              uint8_t i;
- 259   1      
- 260   1              for (i = 0; i < KEY_COUNT; i++)
- 261   1              {
- 262   2                      bsp_DetectKey(i);
- 263   2              }
- 264   1      }
- 265          
- 266          
+ 240   4                      a=0;
+ 241   4                                      //enQueue(&f_K, 3 * i + 2); //push
+ 242   4                              }
+ 243   3                                      //KeyVal=( 3 * i + 2);
+ 244   3                      }
+ 245   2      
+ 246   2                      pBtn->LongCount = 0;
+ 247   2      //              pBtn->RepeatCount = 0;
+ 248   2              }
+ 249   1      }
+ 250          
+ 251          void bsp_KeyScan(void)  //扫描全部按键
+ 252          {
+ 253   1              uint8_t i;
+ 254   1      
+ 255   1              for (i = 0; i < KEY_COUNT; i++)
+ 256   1              {
+ 257   2                      bsp_DetectKey(i);
+ 258   2              }
+ 259   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    643    ----
+   CODE SIZE        =    366    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
-   DATA SIZE        =     43       5
+   DATA SIZE        =     11       5
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.

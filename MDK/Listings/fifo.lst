@@ -1,11 +1,11 @@
-C51 COMPILER V9.60.0.0   FIFO                                                              11/21/2022 13:20:12 PAGE 1   
+C51 COMPILER V9.60.0.0   FIFO                                                              11/26/2022 17:17:52 PAGE 1   
 
 
 C51 COMPILER V9.60.0.0, COMPILATION OF MODULE FIFO
 OBJECT MODULE PLACED IN .\Objects\fifo.obj
 COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE ..\middleware\FIFO\fifo.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\BSP;..\BSP\
-                    -bsp_key;..\USER;..\BSP\bsp_lcd1602;..\middleware\FIFO;..\middleware\LIST;..\middleware;..\middleware\LIST) DEBUG OBJECTE
-                    -XTEND PRINT(.\Listings\fifo.lst) OBJECT(.\Objects\fifo.obj)
+                    -bsp_key;..\USER;..\BSP\bsp_lcd1602;..\middleware\FIFO;..\middleware\LIST;..\middleware;..\middleware\EventHandler;..\BSP
+                    -\DS1302;..\USER\timer) DEBUG OBJECTEXTEND PRINT(.\Listings\fifo.lst) OBJECT(.\Objects\fifo.obj)
 
 line level    source
 
@@ -13,14 +13,14 @@ line level    source
    2           * @Author: liubotao
    3           * @Date: 2022-11-20 20:59:01
    4           * @LastEditors: liubotao
-   5           * @LastEditTime: 2022-11-21 11:53:07
-   6           * @FilePath: \test_51\USER\fifo.c
+   5           * @LastEditTime: 2022-11-25 18:41:24
+   6           * @FilePath: \test_51\middleware\FIFO\fifo.c
    7           * @Description: Ñ­»·¶ÓÁÐ
    8           * 
    9           */
   10          #include "fifo.h"
   11          
-  12          int createQueue(FIFO *f, unsigned char fifoSize,unsigned char *buff)
+  12          int8_t createQueue(FIFO *f, uint8_t fifoSize,uint8_t *buff)
   13          {
   14   1          f -> datas = buff; //(int*)malloc(fifoSize * sizeof(int));
   15   1          f -> head = -1;
@@ -29,7 +29,7 @@ line level    source
   18   1                      return 1;
   19   1      }
   20          
-  21          int deleteQueue(FIFO *f)
+  21          int8_t deleteQueue(FIFO *f)
   22          {
   23   1      
   24   1          //free(f->datas);
@@ -41,7 +41,7 @@ line level    source
   30   1      }
   31          
   32          
-  33          int enQueue(FIFO *f, unsigned char value)
+  33          int8_t enQueue(FIFO *f, uint8_t value)
   34          {
   35   1          if (isFull(f))
   36   1          {
@@ -56,13 +56,13 @@ line level    source
   45   1          return 1;
   46   1      }
   47          
-  48          int deQueue(FIFO *f)
+  48          int8_t deQueue(FIFO *f)
   49          {
   50   1              int temp =Front(f);
   51   1          if (isEmpty(f))
   52   1          {
   53   2              return false;
-C51 COMPILER V9.60.0.0   FIFO                                                              11/21/2022 13:20:12 PAGE 2   
+C51 COMPILER V9.60.0.0   FIFO                                                              11/26/2022 17:17:52 PAGE 2   
 
   54   2          }
   55   1          
@@ -76,7 +76,7 @@ line level    source
   63   1          return temp;
   64   1      }
   65          
-  66          int Front(FIFO *f)
+  66          int8_t Front(FIFO *f)
   67          {
   68   1          
   69   1          if (isEmpty(f))
@@ -85,7 +85,7 @@ line level    source
   72   2          }
   73   1          return f->datas[f->head];
   74   1      }
-  75          int Rear(FIFO *f)
+  75          int8_t Rear(FIFO *f)
   76          {
   77   1          if (isEmpty(f))
   78   1          {
@@ -94,22 +94,23 @@ line level    source
   81   1          return f->datas[f->tail];
   82   1      }
   83          
-  84          int isEmpty(FIFO *f)
+  84          int8_t isEmpty(FIFO *f)
   85          {
   86   1          return f->head == -1;
   87   1      }
   88          
   89          
-  90          int isFull(FIFO *f)
+  90          int8_t isFull(FIFO *f)
   91          {
-  92   1          return ((f->tail + 1) % f->sizes) == f->head;
-  93   1      }
-  94          
+  92   1          
+  93   1          return ((f->tail + 1) % f->sizes) == f->head;
+  94   1      }
   95          
+  96          
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    593    ----
+   CODE SIZE        =    567    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
