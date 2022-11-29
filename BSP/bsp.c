@@ -2,7 +2,7 @@
  * @Author: liubotao
  * @Date: 2022-11-18 00:32:28
  * @LastEditors: liubotao
- * @LastEditTime: 2022-11-29 09:15:19
+ * @LastEditTime: 2022-11-29 09:22:26
  * @FilePath: \test_51\BSP\bsp.c
  * @Description: 中断和驱动初始化
  *
@@ -11,14 +11,13 @@
 //#include "fifo.h"
 #include "EventHandler.h"
 static void task10ms();
-static void task5ms();
+static void task500ms();
 void mainSetClock(TIMER_T * t);
 void mainShowClock(TIMER_T * t);//显示正在设置的时间
 void mainRefreshClock(TIMER_T * t);//显示时钟芯片的时间
 
 void dataPros(uint8_t *buf_s,uint8_t *buf_d);
 //extern  FIFO f_K;
-extern uint8_t KeyVal;        //全局函数，独立键值
 EVEN_T  myevent;
 TIMER_T  timer=
 {
@@ -35,92 +34,8 @@ TIMER_T  timer=
 	LcdShowStr,
 };
 
-uint8_t KEY_1_DownMessage()
-{
-	static uint8_t KeyValue_1;
-	if (KeyVal == KEY_1_DOWN)
-	{
-		KeyValue_1=eNABLE;
-		KeyVal = KEY_1_UP;
-	}
-
-	if (KeyVal == KEY_1_UP&&KeyValue_1==eNABLE)
-	{
-		KeyValue_1=dISABLE;
-		return eNABLE;	
-	}	
-	else
-		return dISABLE;
-
-}
-uint8_t KEY_1_LongMessage()
-{
-	static uint8_t KeyValue_2;
-	if (KeyVal == KEY_1_LONG)
-	{
-		KeyValue_2=eNABLE;
-		KeyVal = KEY_1_UP;
-	}
-	if (KeyVal == KEY_1_UP && KeyValue_2 == eNABLE)
-	{
-		KeyValue_2 = dISABLE;
-		return eNABLE;
-	}
-	else
-		return dISABLE;
-}
 
 
-
-// uint8_t KEY_1_DownMessage()
-// {
-// 	static uint8_t KeyValue_1;
-// 	if (KeyVal == KEY_1_DOWN)
-// 	{
-// 		return eNABLE;	
-// 	}
-
-// 	else
-// 		return dISABLE;
-
-// }
-// uint8_t KEY_1_LongMessage()
-// {
-// 	static uint8_t KeyValue_2;
-// 	if (KeyVal == KEY_1_LONG)
-// 	{
-// 		return eNABLE;	
-// 	}
-// 	else
-// 		return dISABLE;
-// }
-
-
-
-
-uint8_t timeadd(void)
-{
-	addIncident(&timer);
-	return 0;
-}
-uint8_t timeNumber=0;
-
-uint8_t timeSwitch(void)
-{
-	if (timeNumber > 0)
-	{
-        switchIncident(&timer);
-		
-	}
-    else modeIncident(&timer);
-	timeNumber++;	
-	if (timeNumber > 6)
-	{
-        modeIncident(&timer);
-		timeNumber = 0;
-	}
-
-}
 
 void bspInit()              //硬件初始化
 {
@@ -128,15 +43,7 @@ void bspInit()              //硬件初始化
 
     bsp_InitKeyVar();       //按键初始化
     initLcd1602();          //lcd初始化
-    EnevHancleInit(&myevent);
-    evenConnector(&myevent,
-              KEY_1_LongMessage,
-              timeSwitch,
-              0);
-    evenConnector(&myevent,
-              KEY_1_DownMessage,
-              timeadd,
-              1);
+
 	Timer1Init();
    // timer0Init();           //中断初始化
 }
@@ -163,11 +70,10 @@ void timer1Init()           //1ms中断初始化
 static void task10ms()      //10ms任务
 {
     bsp_KeyScan();
-    //bsp_DetectKey(0);
     evenTrigger(&myevent);
 }
 
-static void task5ms() // 5ms任务
+static void task500ms() // 5ms任务
 {
 	showIncident(&timer);
 }
@@ -195,17 +101,17 @@ static void task5ms() // 5ms任务
 
 void Timer1() interrupt 3   //中断服务函数
 {
-	static char time_num20; //中断次数，一次10ms
+	static char time_num500; //中断次数，一次500ms
 	static char time_num10; //中断次数，一次10ms
 
 	TH1 = 0XD8;
 	TL1 = 0XF0;
-	time_num20++;
+	time_num500++;
 	time_num10++;
-	if (time_num20 == 10) // 10ms
+	if (time_num500 == 10) // 10ms
 	{
-		time_num20 = 0;
-		task5ms();
+		time_num500 = 0;
+		task500ms();
 	}
 	if (time_num10 == 1) // 10ms
 	{
